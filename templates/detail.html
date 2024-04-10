@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% import '_components.html' as components with context %}
+
+{# {% block username %}
+{% if user.state != "guest" %}{{user.name | title}}{% endif %}
+{% endblock username %}
+
+{% block useroptions %}
+{% if user.state == "guest" %}
+<a href="{{url_for('auth.login')}}" class="button is-rounded">Login</a>
+{% else %}
+{% if user.admin %}
+<a class="button is-rounded has-bg-primary has-text-primarytext" href="/admin/">ADMIN</a>
+{% endif %}
+<a href="{{url_for('auth.logout')}}" class="button is-rounded">Logout</a>
+{% endif %}
+{% endblock useroptions %} #}
+
+{% block content %}
+<div class="row">
+    <div class="column is-shrink has-bg-light swap-it has-no-padding-left has-no-padding-top" id="sidenav"
+        hx-post="/api/components/nav/sidenav_active" hx-trigger="load">
+    </div>
+    <div class="column">
+        <div class="row">
+            <div class="column is-full" hx-post="/api/components/model_title" hx-trigger="load">
+            </div>
+            <div class="column is-full slide-it" hx-post="/api/components/history" hx-trigger="load" id="model-content">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

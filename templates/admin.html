@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% import '_components.html' as components with context %}
+
+{% block content %}
+<h1 class="has-text-center">Admin</h1>
+
+<div class="row has-space-around">
+    <div class="column is-3 has-centered has-text-center">
+        <button class="button" hx-post="/admin/manage/images" hx-target="#admin-manage-panel">
+            Manage Images
+        </button>
+    </div>
+    <div class="column is-3 has-centered has-text-center">
+        <button class="button" hx-post="/admin/manage/users" hx-target="#admin-manage-panel">
+            Manage Users
+        </button>
+    </div>
+    <div class="column is-3 has-centered has-text-center">
+        <button class="button" hx-post="/admin/manage/worlds" hx-target="#admin-manage-panel">
+            Manage Worlds
+        </button>
+    </div>
+    <div class="column is-3 has-centered has-text-center">
+        <button class="button" hx-post="/admin/migration" hx-target="#admin-manage-panel">
+            Migration
+        </button>
+    </div>
+    <div class="column is-3 has-centered has-text-center">
+        <button class="button" hx-get="/admin/dbdump" hx-target="#admin-manage-panel">
+            Archive Database
+        </button>
+    </div>
+    <div class="column is-3 has-centered has-text-center">
+        <button class="button" hx-get="/admin/dbload" hx-target="#admin-manage-panel">
+            Load from Latest Database Archive
+        </button>
+    </div>
+</div>
+<div id="admin-manage-panel" class="panel">
+</div>
+{% endblock %}

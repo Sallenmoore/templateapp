@@ -1,0 +1,7 @@
+{% extends "base.html" %}
+{% import '_components.html' as components with context %}
+
+{% block content %}
+<div id="user-worlds" hx-post="/api/components/worlds" hx-trigger="load">
+</div>
+{% endblock %}

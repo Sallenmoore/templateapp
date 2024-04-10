@@ -1,0 +1,64 @@
+{% import '_nav.html' as nav with context %}
+
+{% macro menu(user=None, obj=None) -%}
+<ul class="menu__list">
+    {{nav.sidemenu_item(user, obj, name="History", url="/api/components/history")}}
+    {{nav.sidemenu_item(user, obj, name="Attributes", url="/api/components/page/attributes")}}
+    {{nav.sidemenu_item(user, obj, name="Street Map", url="/api/components/map")}}
+    {{nav.sidemenu_item(user, obj, name="Associations", url="/api/components/associations")}}
+</ul>
+<p class="menu__divider"></p>
+<ul class="menu__list">
+    {{nav.sidemenu_item(user, obj,"POI", url="/api/components/childpanel/poi")}}
+    {{nav.sidemenu_item(user, obj,"Encounter", url="/api/components/childpanel/encounter")}}
+    {{nav.sidemenu_item(user, obj,"Faction", url="/api/components/childpanel/faction")}}
+</ul>
+{%- endmacro %}
+
+{% macro attributes(user, obj) -%}
+<div class="column is-full tab-panel" id="city-detail">
+    <div class="row has-bg-primary has-space-around">
+        <div class="column is-4">
+            <div class="card has-bg-light">
+                <div class="card__header is-vertically-centered">
+                    <h3 class="has-text-secondary">Population</h3>
+                </div>
+                <div class="card__content has-bg-secondary inputlabel">
+                    <input class="has-text-center" type="number" {% if not user.world_owner(obj)%} readonly {% endif %}
+                        hx-swap="none" value="{{obj.population}}" name="population" hx-post="/api/model/update">
+                </div>
+            </div>
+        </div>
+        <div class="column is-4">
+            <div class="card has-bg-light">
+                <div class="card__header is-vertically-centered">
+                    <h3 class="has-text-secondary">Districts</h3>
+                </div>
+                <div class="card__content has-bg-secondary">
+                    <form hx-post="/api/model/update" hx-trigger="change" hx-swap="none" id="city-districts">
+                        <div class="row is-vertical">
+                            {%for district in obj.districts %}
+                            <div class="column is-full inputlabel has-bg-secondary">
+                                <input class="has-text-secondary" type="text" {% if not user.world_owner(obj)%} readonly
+                                    {% endif %} name="districts[]" value="{{district}}">
+                                {% if 0 < loop.index0 < obj.abilities | length %} <hr>
+                                    {% endif %}
+                            </div>
+                            {% endfor %}
+                            {% if user.world_user(obj) %}
+                            <div class="row is-vertical">
+                                <div class="column is-full inputlabel">
+                                    <input class="has-bg-secondary" placeholder="Add new district..." type="text"
+                                        name="districts[]">
+                                </div>
+                            </div>
+                            {% endif %}
+                        </div>
+                    </form>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+{%- endmacro %}

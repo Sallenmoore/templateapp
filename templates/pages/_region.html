@@ -1,0 +1,20 @@
+{% import '_nav.html' as nav with context %}
+
+{% macro menu(user=None, obj=None) -%}
+
+<ul class="menu__list">
+    {{nav.sidemenu_item(user, obj, name="History", url="/api/components/history")}}
+    {{nav.sidemenu_item(user, obj, name="Region Map", url="/api/components/map")}}
+    {{nav.sidemenu_item(user, obj, name="Associations", url="/api/components/associations")}}
+
+</ul>
+<p class="menu__divider"></p>
+<ul class="menu__list">
+    {{nav.sidemenu_item(user, obj,"City", url="/api/components/childpanel/city")}}
+    {{nav.sidemenu_item(user, obj,"Location", url="/api/components/childpanel/location")}}
+    {{nav.sidemenu_item(user, obj,"Faction", url="/api/components/childpanel/faction")}}
+    {% if user.world_user(obj) %}
+    {{nav.sidemenu_item(user, obj,"Encounter", url="/api/components/childpanel/encounter")}}
+    {% endif %}
+</ul>
+{%- endmacro %}

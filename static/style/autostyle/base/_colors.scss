@@ -1,0 +1,97 @@
+@use 'sass:color';
+
+$color-type: hsl !default;
+
+@if not index(hsl rgba hex, $color-type)
+{
+    $color-type: hsl;
+}
+
+$primary: #020202 !default;
+$primarytext: getSecondaryColor($primary) !default;
+$secondary: color.scale($primary, $lightness: 75%, $saturation: -60%) !default;
+$secondarytext: getSecondaryColor($secondary) !default;
+$dark: #131c22 !default;
+$light: #F0F8FF !default;
+$dark-grey: #616161 !default;
+$light-grey: #a1a6ae !default;
+$muted: rgba($secondary, .75) !default;
+$screen: rgba($primary, .75) !default;
+$transparent: #ffffff00 !default;
+$link: $secondarytext !default;
+$disabled: #f7f7f7 !default;
+
+$custom-palette: (
+    ) !default;
+
+$color-palette: (
+    "primary": $primary,
+    "secondary": $secondary,
+    "dark": $dark,
+    "light": $light,
+    "light-grey": $light-grey,
+    "dark-grey": $dark-grey,
+    "muted":$muted,
+    "screen":$screen,
+    "transparent": $transparent,
+    "link": $link,
+);
+$text-palette: (
+    "primary": $primarytext,
+    "secondary": $secondarytext,
+    "dark": $dark,
+    "light": $light,
+    "light-grey": $light-grey,
+    "dark-grey": $dark-grey,
+    "link": $link,
+);
+
+$color-palette: map-merge($color-palette, $custom-palette);
+
+:root
+{
+    @each $color in $color-palette
+    {
+        --color-#{nth($color, 1)}: #{createColor(nth($color, 2))};
+        --color-#{nth($color, 1)}-darker: #{createColor(darken(nth($color, 2), 10))};
+        --color-#{nth($color, 1)}-lighter: #{createColor(lighten(nth($color, 2), 10))};
+        --color-#{nth($color, 1)}-text: #{getSecondaryColor(nth($color, 2))};
+        --color-#{nth($color, 1)}-alert: #{createColor(transparentize(nth($color, 2), 0.8))};
+    }
+
+    --color-black-overlay: #{createColor(transparentize($dark, 0.5))};
+
+    --color-link: #{createColor($link)};
+    --color-muted: #{createColor($muted)};
+    --color-disabled: #{createColor($disabled)};
+}
+
+.has-text
+{
+    @each $color in $text-palette
+    {
+        &-#{nth($color, 1)}
+        {
+            --font-color: #{createColor(nth($color, 2))} !important;
+            color: var(--font-color) !important;
+        }
+    }
+}
+
+.has-bg
+{
+    @each $color in $color-palette
+    {
+        &-#{nth($color, 1)}
+        {
+            --background-color: var(--color-#{nth($color, 1)}) !important;
+            background-color: var(--background-color) !important;
+        }
+    }
+
+    &-disabled
+    {
+        --background-color: var(--color-disabled) !important;
+        background-color: var(--background-color) !important;
+    }
+}

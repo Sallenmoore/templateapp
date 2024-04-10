@@ -1,0 +1,82 @@
+{% import '_nav.html' as nav with context %}
+{% import '_components.html' as components with context %}
+
+{% macro menu(user=None, obj=None) -%}
+<ul class="menu__list">
+    {{nav.sidemenu_item(user, obj, name="History", url="/api/components/history")}}
+    {{nav.sidemenu_item(user, obj, name="Attributes", url="/api/components/page/attributes")}}
+    {{nav.sidemenu_item(user, obj, name="Treasure Map", url="/api/components/map")}}
+    {{nav.sidemenu_item(user, obj, name="Associations", url="/api/components/associations")}}
+</ul>
+{%- endmacro %}
+
+
+{% macro attributes(user, obj) -%}
+<div class="row">
+    <div class="column is-full">
+        <h2>Details</h2>
+        <form hx-post="/api/model/update" hx-swap="none" hx-trigger="change">
+            <div class="row is-rounded has-bg-secondary has-text-primarytext">
+                <hr>
+                <div class="column inputlabel">
+                    <label>Rarity</label>:
+                    <input type="text" value="{{obj.rarity}}" {% if not user.world_owner(obj)%} readonly {% endif %}
+                        name="rarity">
+                </div>
+                <div class="column inputlabel">
+                    <label>Cost</label>:
+                    <input type="text" value="{{obj.cost}}" {% if not user.world_owner(obj)%} readonly {% endif %}
+                        name="cost">
+                </div>
+                <div class="column inputlabel">
+                    <label>Duration</label>:
+                    <input type="text" value="{{obj.duration}}" {% if not user.world_owner(obj)%} readonly {% endif %}
+                        name="duration">
+                </div>
+                <div class="column inputlabel">
+                    <label>Weight</label>:
+                    <input type="text" value="{{obj.weight}}" {% if not user.world_owner(obj)%} readonly {% endif %}
+                        name="weight">
+                </div>
+            </div>
+        </form>
+    </div>
+    <div class="column is-full" id="model-features">
+        <h3>Features</h3>
+        {% for feature in obj.features %}
+        <div class="row">
+            <div class="column is-full">
+                <div class="panel has-bg-secondary has-text-secondary">
+                    <p>{{feature | safe}}</p>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+        {% if user.world_user(obj)%}
+        <div class="row">
+            <div class="column is-shrink is-end">
+                <button class="button is-secondary" hx-post="/api/components/page/featuresform"
+                    hx-target="#model-features">Edit</button>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro featuresform(user, obj) -%}
+<h4>Edit Features</h4>
+<form hx-post="/api/model/update" hx-target="#model-content"
+    hx-vals='{"macro":"attributes", "module":"pages/_item.html"}'>
+    <div class="row">
+        <div class="column is-full">
+            {{components.listeditor(user, obj, "features")}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="column is-shrink is-end">
+            <button class="button is-primary" type="submit">Update</button>
+        </div>
+    </div>
+</form>
+{%- endmacro %}

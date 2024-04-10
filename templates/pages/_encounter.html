@@ -1,0 +1,140 @@
+{% import '_nav.html' as nav with context %}
+{% import '_components.html' as components with context %}
+
+{% macro menu(user=None, obj=None) -%}
+<ul class="menu__list">
+    {{nav.sidemenu_item(user, obj, name="History", url="/api/components/history")}}
+    {{nav.sidemenu_item(user, obj, name="Attributes", url="/api/components/page/attributes")}}
+    {{nav.sidemenu_item(user, obj, name="Battle Map", url="/api/components/map")}}
+    {{nav.sidemenu_item(user, obj, name="Associations", url="/api/components/associations")}}
+</ul>
+<p class="menu__divider"></p>
+<ul class="menu__list">
+    {{nav.sidemenu_item(user, obj,"Character", url="/api/components/childpanel/character")}}
+    {{nav.sidemenu_item(user, obj,"Creature", url="/api/components/childpanel/creature")}}
+    {{nav.sidemenu_item(user, obj,"Item", url="/api/components/childpanel/item")}}
+    {{nav.sidemenu_item(user, obj,"Encounter", url="/api/components/childpanel/encounter")}}
+</ul>
+{%- endmacro %}
+
+{% macro attributes(user=None, obj=None) -%}
+<div class="column is-full tab-panel" id="faction-details">
+    <div class="panel has-bg-primary">
+        <div class="row">
+            <div class="column">
+                <form hx-post="/api/model/update" hx-swap="none" hx-trigger="change">
+                    <div class="row">
+                        <div class="column is-full inputlabel">
+                            <label class="has-text-primary">Difficulty: </label>
+                            <input class="has-bg-secondary has-text-secondary has-text-center" {% if not
+                                user.world_owner(obj)%} readonly {% endif %}" value="{{obj.difficulty}}"
+                                name="difficulty">
+                        </div>
+                        <div class="column is-full inputlabel">
+                            <label class="has-text-primary">Enemy Type: </label>
+                            <input class="has-bg-secondary has-text-secondary has-text-center" {% if not
+                                user.world_owner(obj)%} readonly {% endif %}" value="{{obj.enemy_type}}"
+                                name="enemy_type">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            {% if user.world_owner(obj)%}
+            <div class="column" id="model-combat">
+                <h4 class="has-text-secondary">Combat Scenario</h4>
+                <div class="panel has-bg-light">
+                    <p class="has-text-dark">
+                        {{obj.combat_scenario | safe}}
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="column is-shrink is-end">
+                        <button class="button is-secondary" hx-post="/api/components/page/combatform"
+                            hx-target="#model-combat">Edit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="column" id="model-noncombat">
+                <h4 class="has-text-secondary">Non-Combat Scenario</h4>
+                <div class="panel has-bg-light">
+                    <p class="has-text-dark">
+                        {{obj.noncombat_scenario | safe}}
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="column is-shrink is-end">
+                        <button class="button is-secondary" hx-post="/api/components/page/noncombatform"
+                            hx-target="#model-noncombat">Edit</button>
+                    </div>
+                </div>
+            </div>
+            <div class="column" id="model-complications">
+                <h4 class="has-text-secondary">Complications</h4>
+                <div class="panel has-bg-light">
+                    <p class="has-text-dark">
+                        {{obj.complications | safe}}
+                    </p>
+                </div>
+                <div class="row">
+                    <div class="column is-shrink is-end">
+                        <button class="button is-secondary" hx-post="/api/components/page/complicationsform"
+                            hx-target="#model-complications">Edit</button>
+                    </div>
+                </div>
+            </div>
+            {% endif %}"
+        </div>
+    </div>
+</div>
+{%- endmacro %}
+
+{% macro combatform(user, obj) -%}
+<form hx-post="/api/model/update" hx-target="#model-content"
+    hx-vals='{"macro":"attributes", "module":"pages/_encounter.html"}'>
+    <div class="row">
+        <div class="column is-full">
+            <label>Cmbat Scenario</label>
+            {{components.texteditor(user, obj, "combat_scenario")}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="column is-shrink is-end">
+            <button class="button is-primary" type="submit">Update</button>
+        </div>
+    </div>
+</form>
+{%- endmacro %}
+
+{% macro noncombatform(user, obj) -%}
+<form hx-post="/api/model/update" hx-target="#model-content"
+    hx-vals='{"macro":"attributes", "module":"pages/_encounter.html"}'>
+    <div class="row">
+        <div class="column is-full">
+            <h4>Non-Combat Scenario</h4>
+            {{components.texteditor(user, obj, "noncombat_scenario")}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="column is-shrink is-end">
+            <button class="button is-primary" type="submit">Update</button>
+        </div>
+    </div>
+</form>
+{%- endmacro %}
+
+{% macro complicationsform(user, obj) -%}
+<form hx-post="/api/model/update" hx-target="#model-content"
+    hx-vals='{"macro":"attributes", "module":"pages/_encounter.html"}'>
+    <div class="row">
+        <div class="column is-full">
+            <h4>Complications</h4>
+            {{components.texteditor(user, obj, "complications")}}
+        </div>
+    </div>
+    <div class="row">
+        <div class="column is-shrink is-end">
+            <button class="button is-primary" type="submit">Update</button>
+        </div>
+    </div>
+</form>
+{%- endmacro %}

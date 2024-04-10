@@ -1,0 +1,224 @@
+//////////////////////////////////////////////
+//                 Variables                //
+//////////////////////////////////////////////
+
+/// - https://orbitcss.com/documentation/sass-variables
+// List of variables
+$primary: #0e3241;
+//$secondary: #0b154f;
+//////////////////////////////////////////////
+//                 Styles                   //
+//////////////////////////////////////////////
+
+@import "autostyle/all";
+
+// Custom Elements
+// :root
+// {
+//     --var: " ";
+// }
+.hero__content
+{
+    background-color: $secondary;
+
+    & > .row
+    {
+        background-color: rgba(0, 0, 0, 0.4);
+    }
+}
+
+.textbox
+{
+    padding: 1.5rem 0;
+    font-size: 1.25rem;
+    text-align: justify;
+}
+
+@include small
+{
+    .top__brand span
+    {
+        display: none;
+    }
+}
+
+#create-world-form
+{
+
+    /* Increase the text size for input fields */
+    & input,
+    select,
+    option
+    {
+        font-size: 1.5rem;
+
+        /* Adjust the font size as needed */
+        & ::active
+        {
+            background-color: #fff;
+        }
+    }
+
+    & select
+    {
+        background-color: #fff;
+    }
+
+    /* Increase the text size for labels */
+    & label
+    {
+        font-size: 1.8rem;
+        /* Adjust the font size as needed */
+    }
+}
+
+#world-login-button
+{
+    position: absolute;
+    top: 10px;
+    /* Adjust the distance from the top */
+    right: 10px;
+    /* Adjust the distance from the right */
+    padding: 10px;
+}
+
+.world-entry
+{
+    background-size: cover;
+    background-position: center;
+}
+
+.text-overlay
+{
+    position: relative;
+    overflow: hidden;
+
+    img
+    {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+    }
+
+    blockquote
+    {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        width: 100%;
+        box-sizing: border-box;
+        color: $primary;
+        //text-align: center;
+        margin: 0;
+        padding: 1.5rem;
+        transform: translateY(100%);
+        opacity: 0;
+        transition: opacity 0.5s ease, transform 0.5s ease;
+    }
+
+    &:hover blockquote
+    {
+        transform: translateY(0);
+        opacity: 0.9;
+    }
+}
+
+#details
+{
+    background-color: $secondary;
+    color: $secondarytext;
+    min-height: 300px;
+}
+
+.ql-container
+{
+    height: calc(100%);
+}
+
+
+#model-battlemap
+{
+    position: relative;
+}
+
+#battlemap-image
+{
+    display: block;
+    width: 100%;
+    height: auto;
+}
+
+#map-grid-overlay
+{
+    position: absolute;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background-image: linear-gradient(to right, rgba(0, 0, 0, 0.5) 1px, transparent 1px),
+        linear-gradient(to bottom, rgba(0, 0, 0, 0.5) 1px, transparent 1px);
+    background-size: 50px 50px;
+    /* Adjust to change the size of the grid squares */
+}
+
+#back-to-top
+{
+    display: none;
+    position: fixed;
+    bottom: 0.5rem;
+    right: 0.5rem;
+    background-color: $primary;
+    border-radius: 10px;
+    padding: .5rem;
+    border: 1px solid $primarytext;
+    color: $primarytext;
+    cursor: pointer;
+    z-index: 999;
+
+    &:hover
+    {
+        background-color: lighten($primary, 10%);
+    }
+}
+
+.menu-anchor
+{
+    color: $primary;
+    font-family: "Almendra", serif;
+    font-size: 2rem;
+}
+
+.htmx-indicator
+{
+    display: none;
+}
+
+.htmx-request .htmx-indicator
+{
+    display: inline;
+}
+
+.htmx-request.htmx-indicator
+{
+    display: inline;
+}
+
+#request-indicator
+{
+    padding: 1rem;
+    background-color: rgba($primary, 0.25);
+    border-radius: 10px;
+    position: fixed;
+    bottom: 0%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+}
+
+//####### Mobile Styles #######
+@include small
+{
+    .menu-anchor
+    {
+        font-size: 3rem;
+    }
+}

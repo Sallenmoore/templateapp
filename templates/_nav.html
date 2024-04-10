@@ -1,0 +1,125 @@
+{% macro nav(user) -%}
+<nav class="top has-bg-primary">
+    <div class="top__brand">
+        <a href="/">
+            <h3>
+                <iconify-icon icon="fluent-mdl2:build-definition"></iconify-icon>
+                World of ¯\_(ツ)_/¯
+            </h3>
+        </a>
+    </div>
+
+    <div class=" top__links is-end is-tablet-up">
+        <h4 class="has-text-light">
+            {% block username %}
+            {% if user and user.state != "guest" %}
+            {{user.name | title}}
+            {% endif %}
+            {% endblock username %}
+        </h4>
+    </div>
+    <div class=" top__buttons is-tablet-up">
+        {% block useroptions %}
+        {% if user and user.state == "guest" %}
+        <a href="{{url_for('auth.login')}}" class="button is-rounded">Login</a>
+        {% else %}
+        {% if user and user.admin %}
+        <a class="button is-rounded has-bg-primary has-text-primarytext" href="/admin/">ADMIN</a>
+        {% endif %}
+        <a href="{{url_for('auth.logout')}}" class="button is-rounded">Logout</a>
+        {% endif %}
+        {% endblock useroptions %}
+    </div>
+</nav>
+{%- endmacro %}
+
+{% macro sidenav_inactive(user, obj) -%}
+<nav class="top has-bg-secondary is-tablet-up">
+    <div class="top__burger has-text-dark is-end" hx-post="/api/components/nav/sidenav_active" hx-trigger="click"
+        hx-target="#sidenav" hx-swap="innerHTML transition:true">
+        <span></span>
+    </div>
+</nav>
+{%- endmacro %}
+
+{% macro sidenav_active(user, obj) -%}
+<nav class="top has-bg-secondary is-tablet-up">
+    <div class="top__brand has-text-secondary ">
+        <iconify-icon icon="fluent-mdl2:build-definition"></iconify-icon>
+    </div>
+    <div class="top__brand has-text-secondary ">
+        ¯\_(ツ)_/¯
+    </div>
+    <div class="top__burger has-text-secondary is-active is-end" hx-post="/api/components/nav/sidenav_inactive"
+        hx-trigger="click" hx-target="#sidenav" hx-swap="innerHTML transition:true">
+        <span></span>
+    </div>
+</nav>
+<nav class="menu has-bg-secondary is-active" id="model-menu-container">
+    <ul class="menu__list">
+        <li>
+        </li>
+        <li class="is-mobile-only">
+            {% if user and user.state == "guest" %}
+            <a href="/auth/login" class="button is-rounded ">Login</a>
+            {% endif %}
+        </li>
+        <li>
+            {% if obj.geneology %}
+            {% for ans in obj.geneology %}
+            <a href="{{ans.page_path()}}">
+                <div class="is-addon-group is-rounded">
+                    <span class="tag is-primary">
+                        {{ans.title}}
+                    </span>
+                    <span class="tag is-secondary">
+                        <span class="has-text-secondary">{{ans.name}}</span>
+                    </span>
+                </div>
+            </a>
+            {% endfor %}
+            {% endif %}
+        </li>
+    </ul>
+    <p class="menu__divider"></p>
+    {{obj.menu_content(user) | safe}}
+</nav>
+{%- endmacro %}
+
+{% macro sidemenu_item(user, obj, name, url) -%}
+<li>
+    <div class="row">
+        <div class="column is-mobile-11">
+            <a class="menu-anchor" hx-post="{{url}}" hx-target="#model-content" hx-swap="innerHTML transition:true"
+                hx-on:click="htmx.find('#model-content').scrollIntoView()">
+                {{name}}
+            </a>
+        </div>
+        {% if obj.get_children(name) %}
+        <div class="column is-mobile-1 is-1 is-end">
+            <a class="is-float-right has-text-dark" hx-post="/api/components/nav/sidemenu_subitems/{{name|lower}}"
+                hx-target="closest .column" hx-swap="outerHTML">
+                <iconify-icon icon="material-symbols:expand-more" width="1rem" height="1rem"></iconify-icon>
+            </a>
+        </div>
+        {% endif %}
+    </div>
+</li>
+{%- endmacro %}
+
+{% macro sidemenu_subitems(children) -%}
+<div class="column is-mobile-1 is-1 is-end">
+    <a class="is-float-right" hx-post="/api/components/nav/sidenav_active" hx-target="#sidenav">
+        <iconify-icon icon='material-symbols:close' width="1rem" style="color: black;"></iconify-icon>
+    </a>
+</div>
+<div class="column is-full">
+    <ul>
+        {% for child in children %}
+        <li>
+            <a href="{{child.page_path()}}">{{child.name}}</a>
+        </li>
+        {% endfor %}
+    </ul>
+</div>
+{%- endmacro %}
