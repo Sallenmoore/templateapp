@@ -47,12 +47,46 @@ export function from_html(html, trim = true) {
 }
 
 //================== Form ==================//
-export function form_values(form, data = {}) {
-    let formData = new FormData(form);
-    formData.forEach(function (value, key) {
-        if (value) data[key] = value;
-    });
-    return data;
+export function form_values(evt) {
+    var parameters = evt.detail.parameters;
+    var values = {};
+    console.log(parameters);
+    for (var key in parameters) {
+        //console.log(key);
+        if (key.includes("[].")) {
+            var attr = key.split("[].")[0];
+            var subobjkey = key.split("[].")[1];
+
+            if (!values[attr]) {
+                values[attr] = [];
+            }
+            if (Array.isArray(parameters[key])) {
+                Array.from(parameters[key]).forEach((value, index) => {
+                    values[attr][index] = values[attr][index] || {};
+                    values[attr][index][subobjkey] = value;
+                });
+            } else {
+                values[attr][0] = values[attr][0] || {};
+                values[attr][0][subobjkey] = parameters[key];
+            }
+            console.log({ key: key, params: parameters[key], attr: attr, values: values[attr], subkey: subobjkey });
+        } else if (key.includes("[]")) {
+            var attr = key.replace("[]", "");
+            console.log(attr);
+            console.log(parameters[key]);
+            values[attr] = Array.isArray(parameters[key]) ? parameters[key] : [parameters[key]];
+            values[attr] = values[attr].filter(value => value.trim() !== "");
+        } else if (key.includes(".")) {
+            var attr = key.split(".")[0];
+            var subobjkey = key.split(".")[1];
+            values[attr] = values[attr] || {};
+            values[attr][subobjkey] = parameters[key];
+        } else {
+            values[key] = parameters[key];
+        }
+    }
+    console.log(values);
+    evt.detail.parameters = values;
 }
 
 //====================== AJAX ========================//

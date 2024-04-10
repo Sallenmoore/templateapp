@@ -14,16 +14,14 @@
             href="{{url_for('static', filename='images/favicon-32x32.png')}}">
         <link rel="icon" type="image/png" sizes="16x16"
             href="{{url_for('static', filename='images/favicon-16x16.png')}}">
-        <!--link rel="manifest" href="{{url_for('static', filename='site.webmanifest')}}"-->
 
-        <title>{% if title %} {{title}} {% else %} World {% endif %}</title>
+        <title>{% if title %} {{title}} {% else %} App {% endif %}</title>
         <!-- Vendor CSS-->
-        <link href="https://cdn.quilljs.com/1.3.6/quill.snow.css" rel="stylesheet">
+
         <!-- Compiled and minified CSS-->
         <link rel="stylesheet" type="text/css" href="{{ url_for('static', filename='style/main.css') }}">
 
         <!-- Vendor JavaScript Libs-->
-        <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
         <script
             src="https://cdn.jsdelivr.net/npm/@tinymce/tinymce-webcomponent@2/dist/tinymce-webcomponent.min.js"></script>
         <script src="https://cdn.tiny.cloud/1/9lsy64utfaqu59jqnnj0x9v88m8ku2us9p1jpxds8xe7kztl/tinymce/6/tinymce.min.js"
@@ -34,7 +32,9 @@
         <script src="https://unpkg.com/htmx.org@1.9.11/dist/ext/json-enc.js"></script>
 
         <script src="https://code.iconify.design/iconify-icon/1.0.3/iconify-icon.min.js"></script>
+
         <!-- JavaScript Libs -->
+        <script type="module" src="{{ url_for('static', filename='js/main.js') }}"></script>
 
         {% endblock %}
     </head>

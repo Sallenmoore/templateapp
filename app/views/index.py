@@ -1,8 +1,7 @@
 import requests
-from flask import Blueprint, redirect, render_template, request, session, url_for
-
 from autonomous import AutoModel, log
 from autonomous.auth import AutoAuth, auth_required
+from flask import Blueprint, redirect, render_template, request, session, url_for
 
 index_page = Blueprint("index", __name__)
 
@@ -38,10 +37,8 @@ def detail(model, pk):
             log(user)
             context = {
                 "user": user.pk,
-                "title": obj.name,
                 "model": obj.model_name().lower(),
                 "pk": obj.pk,
-                "world": obj.get_world().pk,
             }
             return render_template("detail.html", user=user, context=context)
     else:
@@ -70,12 +67,6 @@ def api(rest_path):
 @index_page.route("/task/<path:rest_path>", endpoint="tasks", methods=("POST",))
 @auth_required()
 def tasks(rest_path):
-    # if request.method == "GET":
-    #     return redirect(url_for("index.index"))
-    # else:
     url = f"http://tasks:5000/{rest_path}"
-    # log(url, request.json)
-    # with httpx.Client() as client:
     response = requests.post(url, json=request.json)
-    # log(response.text)
     return response.text

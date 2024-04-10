@@ -2,14 +2,7 @@ import os
 
 from config import Config
 from flask import Flask, url_for
-from views import (
-    components,
-    image,
-    index,
-    journal,
-    model,
-    world,
-)
+from views import index
 
 from autonomous import log
 from autonomous.auth import AutoAuth
@@ -47,10 +40,5 @@ def create_app():
     ######################################
 
     app.register_blueprint(index.index_endpoint, url_prefix="/")
-    app.register_blueprint(world.world_endpoint, url_prefix="/world")
-    app.register_blueprint(model.model_endpoint, url_prefix="/model")
-    app.register_blueprint(journal.journal_endpoint, url_prefix="/journal")
-    app.register_blueprint(image.image_endpoint, url_prefix="/image")
-    app.register_blueprint(components.components_endpoint, url_prefix="/components")
 
     return app

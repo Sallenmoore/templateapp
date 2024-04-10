@@ -11,20 +11,6 @@ Usage:
 Example:
     app = create_app()
 
-Attributes:
-    - Config: A configuration class defining application-wide settings.
-    - index_page: Blueprint for the main index page.
-    - auth_page: Blueprint for authentication-related pages.
-    - admin_page: Blueprint for admin-related pages.
-    - region_page: Blueprint for region-related pages.
-    - city_page: Blueprint for city-related pages.
-    - location_page: Blueprint for location-related pages.
-    - faction_page: Blueprint for faction-related pages.
-    - character_page: Blueprint for character-related pages.
-    - item_page: Blueprint for item-related pages.
-    - encounter_page: Blueprint for encounter-related pages.
-    - creature_page: Blueprint for creature-related pages.
-
 Functions:
     - create_app: Function to create and configure the Flask app object.
 

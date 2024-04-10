@@ -9,7 +9,6 @@ from flask import Blueprint, redirect, render_template, request, session, url_fo
 from autonomous import log
 from autonomous.auth import AutoAuth, GithubAuth, GoogleAuth
 from models.user import User
-from models.world import World
 
 auth_page = Blueprint("auth", __name__)
 
@@ -39,9 +38,7 @@ def login():
         session["authprovider_state"] = state
 
         return redirect(uri)
-    worlds = World.all()
-    worlds = random.sample(worlds, k=min(4, len(worlds)))
-    return render_template("login.html", context={}, worlds=worlds)
+    return render_template("login.html", context={})
 
 
 @auth_page.route("/authorize", methods=("GET", "POST"))
